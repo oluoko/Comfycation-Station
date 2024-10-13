@@ -19,8 +19,16 @@ const NavBar = () => {
             className="flex items-center gap-2 cursor-pointer"
             onClick={() => router.push("/")}
           >
-            <Image src="/bed.svg" alt="logo" width="30" height="30" />
-            <div className="font-bold text-xl">Comfycation Station</div>
+            <Image
+              src="/bed.svg"
+              alt="logo"
+              width={25}
+              height={25}
+              className="h-5 md:h-8 w-5 md:w-8"
+            />
+            <div className="font-bold text-sm md:text-xl font-serif">
+              Comfycation Station
+            </div>
           </div>
           <SearchInput />
           <div className="flex gap-3 items-center">
