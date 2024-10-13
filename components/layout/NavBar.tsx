@@ -5,6 +5,7 @@ import Container from "../Container";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
+import SearchInput from "./SearchInput";
 
 const NavBar = () => {
   const router = useRouter();
@@ -21,6 +22,7 @@ const NavBar = () => {
             <Image src="/bed.svg" alt="logo" width="30" height="30" />
             <div className="font-bold text-xl">Comfycation Station</div>
           </div>
+          <SearchInput />
           <div className="flex gap-3 items-center">
             <div>Theme Button </div> <UserButton afterSwitchSessionUrl="/" />
             {!userId && (
