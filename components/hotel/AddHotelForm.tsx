@@ -105,8 +105,14 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
     setImageIsDeleting(true);
     const imageKey = image.substring(image.lastIndexOf("/") + 1);
 
+    if (!imageKey) {
+      console.log("No image key found");
+    } else {
+      console.log("Image Key: ", imageKey);
+    }
+
     axios
-      .post("/api/uploathing/delete", { imageKey })
+      .post("/api/uploadthing/delete", { imageKey })
       .then((res) => {
         if (res.data.success) {
           setImage("");
