@@ -14,6 +14,7 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
 
 interface AddHotelFormProps {
   hotel: HotelWithRooms | null;
@@ -91,8 +92,11 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
     <div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <h3 className="text-lg font-semibold">
+            {hotel ? "Update your hotel" : "Describe your hotel"}
+          </h3>
           <div className="flex flex-col md:flex-row gap-6">
-            <div className="">
+            <div className="flex-1 flex flex-col gap-6">
               <FormField
                 control={form.control}
                 name="title"
@@ -108,8 +112,56 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Hotel Description</FormLabel>
+                    <FormDescription>
+                      Provide a detailed description of your hotel.
+                    </FormDescription>
+                    <FormControl>
+                      <Textarea
+                        placeholder="This wonderful hotel is packed with  many awesome amenities!"
+                        {...field}
+                      />
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div>
+                <FormLabel>Choose Amenities</FormLabel>
+                <FormDescription>
+                  Choose Amenities popular in you r hotel
+                </FormDescription>
+                <div className="grid grid-cols-2 gap-4 mt-2">
+                  <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Hotel Description</FormLabel>
+                        <FormDescription>
+                          Provide a detailed description of your hotel.
+                        </FormDescription>
+                        <FormControl>
+                          <Textarea
+                            placeholder="This wonderful hotel is packed with  many awesome amenities!"
+                            {...field}
+                          />
+                        </FormControl>
+
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
             </div>
-            <div className=""></div>
+            <div className="flex-1 flex flex-col gap-6"></div>
           </div>
         </form>
       </Form>
