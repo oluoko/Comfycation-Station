@@ -18,7 +18,10 @@ import { Textarea } from "../ui/textarea";
 import { Checkbox } from "../ui/checkbox";
 import { useState } from "react";
 import { UploadButton } from "@/utils/uploadthing";
-import { useToast } from "../ui/toaster";
+import { useToast } from "@/hooks/use-toast";
+import Image from "next/image";
+import { Button } from "../ui/button";
+import { Loader2, XCircle } from "lucide-react";
 
 interface AddHotelFormProps {
   hotel: HotelWithRooms | null;
@@ -28,43 +31,10 @@ export type HotelWithRooms = Hotel & {
   rooms: Room[];
 };
 
-const formSchema = z.object({
-  title: z.string().min(3, {
-    message: "Title must be at least 3 characters long",
-  }),
-  description: z.string().min(10, {
-    message: "Description must be at least 10 characters long",
-  }),
-  image: z.string().min(1, {
-    message: "Image is required",
-  }),
-  country: z.string().min(1, {
-    message: "Country is required",
-  }),
-
-  state: z.string().optional(),
-  city: z.string().optional(),
-  locationDescription: z.string().min(10, {
-    message: "Description must be at least 10 characters long",
-  }),
-  gym: z.boolean().optional(),
-  spa: z.boolean().optional(),
-  bar: z.boolean().optional(),
-  laundry: z.boolean().optional(),
-  restaurant: z.boolean().optional(),
-  shopping: z.boolean().optional(),
-  freeParking: z.boolean().optional(),
-  bikeRental: z.boolean().optional(),
-  freeWifi: z.boolean().optional(),
-  movieNights: z.boolean().optional(),
-  swimmingPool: z.boolean().optional(),
-  coffeeShop: z.boolean().optional(),
-  conferenceRoom: z.boolean().optional(),
-});
-
 const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
   const [image, setImage] = useState<string | undefined>(hotel?.image);
   const { toast } = useToast();
+  const [imageIsDeleting, setImageIsDeleting] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -92,9 +62,52 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
     },
   });
 
+  const formSchema = z.object({
+    title: z.string().min(3, {
+      message: "Title must be at least 3 characters long",
+    }),
+    description: z.string().min(10, {
+      message: "Description must be at least 10 characters long",
+    }),
+    image: z.string().min(1, {
+      message: "Image is required",
+    }),
+    country: z.string().min(1, {
+      message: "Country is required",
+    }),
+
+    state: z.string().optional(),
+    city: z.string().optional(),
+    locationDescription: z.string().min(10, {
+      message: "Description must be at least 10 characters long",
+    }),
+    gym: z.boolean().optional(),
+    spa: z.boolean().optional(),
+    bar: z.boolean().optional(),
+    laundry: z.boolean().optional(),
+    restaurant: z.boolean().optional(),
+    shopping: z.boolean().optional(),
+    freeParking: z.boolean().optional(),
+    bikeRental: z.boolean().optional(),
+    freeWifi: z.boolean().optional(),
+    movieNights: z.boolean().optional(),
+    swimmingPool: z.boolean().optional(),
+    coffeeShop: z.boolean().optional(),
+    conferenceRoom: z.boolean().optional(),
+  });
+
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
   }
+
+  const handleImageDelete = (image: string) => {
+    setImageIsDeleting(true);
+    setTimeout(() => {
+      setImage(undefined);
+      setImageIsDeleting(false);
+    }, 1000);
+  };
+
   return (
     <div>
       <Form {...form}>
@@ -362,7 +375,26 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
                     </FormDescription>
                     <FormControl>
                       {image ? (
-                        <></>
+                        <>
+                          {" "}
+                          <div className="relative max-x-[400px] min-w-[200px] max-h-[400px] min-h-[200px] mt-4">
+                            <Image
+                              fill
+                              src={image}
+                              alt="Hotel Image"
+                              className="rounded-md object-contain"
+                            />
+                            <Button
+                              onClick={() => handleImageDelete(image)}
+                              type="button"
+                              size="icon"
+                              variant="ghost"
+                              className="absolute right-[-12px] top-0"
+                            >
+                              {imageIsDeleting ? <Loader2 /> : <XCircle />}
+                            </Button>
+                          </div>
+                        </>
                       ) : (
                         <>
                           {" "}
@@ -379,8 +411,10 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
                                 });
                               }}
                               onUploadError={(error: Error) => {
-                                // Do something with the error.
-                                alert(`ERROR! ${error.message}`);
+                                toast({
+                                  variant: "destructive",
+                                  description: `Error! : ${error.message}`,
+                                });
                               }}
                             />
                           </div>
