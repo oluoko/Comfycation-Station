@@ -16,6 +16,9 @@ import {
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Checkbox } from "../ui/checkbox";
+import { useState } from "react";
+import { UploadButton } from "@/utils/uploadthing";
+import { useToast } from "../ui/toaster";
 
 interface AddHotelFormProps {
   hotel: HotelWithRooms | null;
@@ -60,6 +63,9 @@ const formSchema = z.object({
 });
 
 const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
+  const [image, setImage] = useState<string | undefined>(hotel?.image);
+  const { toast } = useToast();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -103,7 +109,10 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Hotel Title</FormLabel>
+                    <FormLabel>
+                      Hotel Title{" "}
+                      <span className="text-2xl text-red-600">*</span>
+                    </FormLabel>
                     <FormDescription>Provide your hotel name.</FormDescription>
                     <FormControl>
                       <Input placeholder="Beach Hotel" {...field} />
@@ -118,7 +127,10 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Hotel Description</FormLabel>
+                    <FormLabel>
+                      Hotel Description{" "}
+                      <span className="text-2xl text-red-600">*</span>
+                    </FormLabel>
                     <FormDescription>
                       Provide a detailed description of your hotel.
                     </FormDescription>
@@ -336,6 +348,49 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
                   />
                 </div>
               </div>
+              <FormField
+                control={form.control}
+                name="image"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col space-y-3">
+                    <FormLabel>
+                      Upload an Image{" "}
+                      <span className="text-2xl text-red-600">*</span>
+                    </FormLabel>
+                    <FormDescription>
+                      Upload an image of your hotel.
+                    </FormDescription>
+                    <FormControl>
+                      {image ? (
+                        <></>
+                      ) : (
+                        <>
+                          {" "}
+                          <div className="flex flex-col items-center max-w-[400px] p-12 border-2 border-dashed border-primary/50 rounded mt-4">
+                            <UploadButton
+                              endpoint="imageUploader"
+                              onClientUploadComplete={(res) => {
+                                // Do something with the response
+                                console.log("Files: ", res);
+                                setImage(res[0].url);
+                                toast({
+                                  variant: "success",
+                                  description: "Image uploaded successfully",
+                                });
+                              }}
+                              onUploadError={(error: Error) => {
+                                // Do something with the error.
+                                alert(`ERROR! ${error.message}`);
+                              }}
+                            />
+                          </div>
+                        </>
+                      )}
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
             <div className="flex-1 flex flex-col gap-6"></div>
           </div>
