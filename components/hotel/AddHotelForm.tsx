@@ -4,6 +4,16 @@ import * as z from "zod";
 import { Hotel, Room } from "@prisma/client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
+import { Input } from "../ui/input";
 
 interface AddHotelFormProps {
   hotel: HotelWithRooms | null;
@@ -77,7 +87,34 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
   }
-  return <div>Add Hotel Form</div>;
+  return (
+    <div>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <div className="flex flex-col md:flex-row gap-6">
+            <div className="">
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Hotel Title</FormLabel>
+                    <FormDescription>Provide your hotel name.</FormDescription>
+                    <FormControl>
+                      <Input placeholder="Beach Hotel" {...field} />
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className=""></div>
+          </div>
+        </form>
+      </Form>
+    </div>
+  );
 };
 
 export default AddHotelForm;
