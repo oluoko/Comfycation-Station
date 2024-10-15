@@ -22,6 +22,7 @@ import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { Loader2, XCircle } from "lucide-react";
+import axios from "axios";
 
 interface AddHotelFormProps {
   hotel: HotelWithRooms | null;
@@ -35,32 +36,6 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
   const [image, setImage] = useState<string | undefined>(hotel?.image);
   const { toast } = useToast();
   const [imageIsDeleting, setImageIsDeleting] = useState(false);
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: "",
-      description: "",
-      image: "",
-      country: "",
-      state: "",
-      city: "",
-      locationDescription: "",
-      gym: false,
-      spa: false,
-      bar: false,
-      laundry: false,
-      restaurant: false,
-      shopping: false,
-      freeParking: false,
-      bikeRental: false,
-      freeWifi: false,
-      movieNights: false,
-      swimmingPool: false,
-      coffeeShop: false,
-      conferenceRoom: false,
-    },
-  });
 
   const formSchema = z.object({
     title: z.string().min(3, {
@@ -96,16 +71,60 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
     conferenceRoom: z.boolean().optional(),
   });
 
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      title: "",
+      description: "",
+      image: "",
+      country: "",
+      state: "",
+      city: "",
+      locationDescription: "",
+      gym: false,
+      spa: false,
+      bar: false,
+      laundry: false,
+      restaurant: false,
+      shopping: false,
+      freeParking: false,
+      bikeRental: false,
+      freeWifi: false,
+      movieNights: false,
+      swimmingPool: false,
+      coffeeShop: false,
+      conferenceRoom: false,
+    },
+  });
+
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
   }
 
   const handleImageDelete = (image: string) => {
     setImageIsDeleting(true);
-    setTimeout(() => {
-      setImage(undefined);
-      setImageIsDeleting(false);
-    }, 1000);
+    const imageKey = image.substring(image.lastIndexOf("/") + 1);
+
+    axios
+      .post("/api/uploathing/delete", { imageKey })
+      .then((res) => {
+        if (res.data.success) {
+          setImage("");
+          toast({
+            variant: "success",
+            description: "Image deleted successfully",
+          });
+        }
+      })
+      .catch(() => {
+        toast({
+          variant: "destructive",
+          description: "Error deleting image",
+        });
+      })
+      .finally(() => {
+        setImageIsDeleting(false);
+      });
   };
 
   return (
