@@ -138,7 +138,7 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
                 <FormDescription>
                   Choose Amenities popular in you r hotel
                 </FormDescription>
-                <div className="grid grid-cols-2 gap-4 mt-2">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-2">
                   <FormField
                     control={form.control}
                     name="gym"
