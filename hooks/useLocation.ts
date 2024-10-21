@@ -31,6 +31,14 @@ const useLocation = () => {
       (city) => city.countryCode === countryCode && city.stateCode === stateCode
     );
   };
+
+  return {
+    getAllCountries: Country.getAllCountries(),
+    getCountryByCode,
+    getStatesByCode,
+    getConutryStates,
+    getStateCities,
+  };
 };
 
 export default useLocation;
