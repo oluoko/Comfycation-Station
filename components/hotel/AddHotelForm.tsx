@@ -482,13 +482,16 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
               />
             </div>
             <div className="flex-1 flex flex-col gap-6">
-              <div className="gird grid-cols-1 md:grid-cols-2 gap2-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <FormField
                   control={form.control}
                   name="country"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Select Country</FormLabel>
+                      <FormLabel>
+                        Select Country
+                        <span className="text-2xl text-red-600">*</span>
+                      </FormLabel>
                       <FormDescription>
                         In which country is your property located
                       </FormDescription>
@@ -520,7 +523,101 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
                     </FormItem>
                   )}
                 />
+                <FormField
+                  control={form.control}
+                  name="state"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Select State</FormLabel>
+                      <FormDescription>
+                        In which state is your property located
+                      </FormDescription>
+                      <Select
+                        disabled={isLoading || states.length < 1}
+                        onValueChange={field.onChange}
+                        value={field.value}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger className="bg-background">
+                          <SelectValue
+                            defaultValue={field.value}
+                            placeholder="Select a State"
+                          />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {states.map((state) => {
+                            return (
+                              <SelectItem
+                                key={state.isoCode}
+                                value={state.isoCode}
+                              >
+                                {state.name}
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectContent>
+                      </Select>
+                    </FormItem>
+                  )}
+                />
               </div>
+              <FormField
+                control={form.control}
+                name="city"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Select City</FormLabel>
+                    <FormDescription>
+                      In which city is your property located
+                    </FormDescription>
+                    <Select
+                      disabled={isLoading || cities.length < 1}
+                      onValueChange={field.onChange}
+                      value={field.value}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger className="bg-background">
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select a City"
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {cities.map((city) => {
+                          return (
+                            <SelectItem key={city.name} value={city.name}>
+                              {city.name}
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="locationDescription"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Location Description{" "}
+                      <span className="text-2xl text-red-600">*</span>
+                    </FormLabel>
+                    <FormDescription>
+                      Provide a detailed location description of your hotel.
+                    </FormDescription>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Located at the very end of the forest road!"
+                        {...field}
+                      />
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
           </div>
         </form>
