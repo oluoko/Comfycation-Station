@@ -1,8 +1,35 @@
-import { Country } from "country-state-city";
+import { Country, State, City } from "country-state-city";
 
 const useLocation = () => {
   const getCountryByCode = (countryCode: string) => {
-    return Country;
+    return Country.getAllCountries().find(
+      (country) => country.isoCode === countryCode
+    );
+  };
+
+  const getStatesByCode = (countryCode: string, stateCode: string) => {
+    const state = State.getAllStates().find(
+      (state) =>
+        state.countryCode === countryCode && state.isoCode === stateCode
+    );
+
+    if (!state) {
+      return null;
+    }
+
+    return state;
+  };
+
+  const getConutryStates = (countryCode: string) => {
+    return State.getAllStates().filter(
+      (state) => state.countryCode === countryCode
+    );
+  };
+
+  const getStateCities = (countryCode: string, stateCode: string) => {
+    return City.getAllCities().filter(
+      (city) => city.countryCode === countryCode && city.stateCode === stateCode
+    );
   };
 };
 
