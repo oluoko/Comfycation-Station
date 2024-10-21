@@ -20,23 +20,23 @@ const useLocation = () => {
     return state;
   };
 
-  const getConutryStates = (countryCode: string) => {
+  const getCountryStates = (countryCode: string) => {
     return State.getAllStates().filter(
       (state) => state.countryCode === countryCode
     );
   };
 
-  const getStateCities = (countryCode: string, stateCode: string) => {
+  const getStateCities = (countryCode: string, stateCode?: string) => {
     return City.getAllCities().filter(
       (city) => city.countryCode === countryCode && city.stateCode === stateCode
     );
   };
 
   return {
-    getAllCountries: Country.getAllCountries(),
+    getAllCountries: Country.getAllCountries,
     getCountryByCode,
     getStatesByCode,
-    getConutryStates,
+    getCountryStates,
     getStateCities,
   };
 };
