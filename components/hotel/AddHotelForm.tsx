@@ -29,7 +29,14 @@ import { UploadButton } from "@/utils/uploadthing";
 import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
 import { Button } from "../ui/button";
-import { Loader2, Pencil, PencilLine, XCircle } from "lucide-react";
+import {
+  Loader,
+  Loader2,
+  Pencil,
+  PencilLine,
+  Trash,
+  XCircle,
+} from "lucide-react";
 import axios from "axios";
 import useLocation from "@/hooks/useLocation";
 import { ICity, IState } from "country-state-city";
@@ -48,6 +55,7 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
   const [states, setStates] = useState<IState[]>([]);
   const [cities, setCities] = useState<ICity[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const { toast } = useToast();
   const router = useRouter();
@@ -181,6 +189,32 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
         });
     }
   }
+
+  const handleHotelDelete = async (hotel: HotelWithRooms) => {
+    setIsDeleting(true);
+    const getImageKey = (src: string) =>
+      src.substring(src.lastIndexOf("/") + 1);
+
+    try {
+      const imageKey = getImageKey(hotel.image);
+      await axios.post("/api/uploadthing/delete", { imageKey });
+      await axios.delete(`/api/hotel/${hotel.id}`);
+
+      setIsDeleting(false);
+      toast({
+        variant: "success",
+        description: "Hotel deleted successfully",
+      });
+      router.push("/hotel/new");
+    } catch (error: any) {
+      console.error(error);
+      setIsDeleting(false);
+      toast({
+        variant: "destructive",
+        description: `Error deleting hotel: ${error.message}`,
+      });
+    }
+  };
 
   const handleImageDelete = (image: string) => {
     setImageIsDeleting(true);
@@ -670,6 +704,26 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
                 )}
               />
               <div className="flex justify-between gap-2 flex-wrap">
+                {hotel && (
+                  <Button
+                    className="bg-red-600 hover:bg-red-700/60 max-w-[150px]"
+                    onClick={() => handleHotelDelete(hotel)}
+                    variant="ghost"
+                    type="button"
+                    disabled={isDeleting || isLoading}
+                  >
+                    {isDeleting ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4" /> Deleting...
+                      </>
+                    ) : (
+                      <>
+                        <Trash className="mr-2 h-4 w-4" />
+                        Delete
+                      </>
+                    )}
+                  </Button>
+                )}
                 {hotel ? (
                   <Button className="max-w-[150px]" disabled={isLoading}>
                     {isLoading ? (
