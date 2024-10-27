@@ -30,6 +30,7 @@ import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import {
+  Eye,
   Loader,
   Loader2,
   Pencil,
@@ -724,6 +725,21 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
                     )}
                   </Button>
                 )}
+
+                {hotel && (
+                  <Button
+                    onClick={() => router.push(`/hotel-details/${hotel.id}`)}
+                    type="button"
+                    variant="outline"
+                  >
+                    <Eye
+                      className="mr-2 h-4 w-4
+                    "
+                    />{" "}
+                    View Hotel
+                  </Button>
+                )}
+
                 {hotel ? (
                   <Button className="max-w-[150px]" disabled={isLoading}>
                     {isLoading ? (
