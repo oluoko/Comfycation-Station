@@ -142,7 +142,24 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
   function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     if (hotel) {
-      // Update Hotel
+      axios
+        .patch(`/api/hotel/${hotel.id}`, values)
+        .then((res) => {
+          toast({
+            variant: "success",
+            description: "Hotel updated successfully",
+          });
+          router.push(`/hotel/${res.data.id}`);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          toast({
+            variant: "destructive",
+            description: "Error while updating hotel",
+          });
+          setIsLoading(false);
+        });
     } else {
       axios
         .post("/api/hotel", values)
