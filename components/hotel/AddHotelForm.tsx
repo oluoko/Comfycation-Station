@@ -33,6 +33,7 @@ import { Loader2, Pencil, PencilLine, XCircle } from "lucide-react";
 import axios from "axios";
 import useLocation from "@/hooks/useLocation";
 import { ICity, IState } from "country-state-city";
+import { useRouter } from "next/navigation";
 
 interface AddHotelFormProps {
   hotel: HotelWithRooms | null;
@@ -49,6 +50,7 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { toast } = useToast();
+  const router = useRouter();
   const { getAllCountries, getCountryStates, getStateCities } = useLocation();
   const countries = getAllCountries();
 
@@ -138,7 +140,29 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
   }, [form.watch("country"), form.watch("state")]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    setIsLoading(true);
+    if (hotel) {
+      // Update Hotel
+    } else {
+      axios
+        .post("/api/hotel", values)
+        .then((res) => {
+          toast({
+            variant: "success",
+            description: "Hotel created successfully",
+          });
+          router.push(`/hotel/${res.data.id}`);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          toast({
+            variant: "destructive",
+            description: "Error while creating hotel",
+          });
+          setIsLoading(false);
+        });
+    }
   }
 
   const handleImageDelete = (image: string) => {
