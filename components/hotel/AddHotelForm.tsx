@@ -29,7 +29,7 @@ import { UploadButton } from "@/utils/uploadthing";
 import { useToast } from "@/hooks/use-toast";
 import Image from "next/image";
 import { Button } from "../ui/button";
-import { Loader2, XCircle } from "lucide-react";
+import { Loader2, Pencil, PencilLine, XCircle } from "lucide-react";
 import axios from "axios";
 import useLocation from "@/hooks/useLocation";
 import { ICity, IState } from "country-state-city";
@@ -90,7 +90,7 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
+    defaultValues: hotel || {
       title: "",
       description: "",
       image: "",
@@ -113,6 +113,16 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
       conferenceRoom: false,
     },
   });
+
+  useEffect(() => {
+    if (typeof image === "string") {
+      form.setValue("image", image, {
+        shouldValidate: true,
+        shouldDirty: true,
+        shouldTouch: true,
+      });
+    }
+  }, [image]);
 
   useEffect(() => {
     const selectedCountry = form.watch("country");
@@ -618,6 +628,35 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
                   </FormItem>
                 )}
               />
+              <div className="flex justify-between gap-2 flex-wrap">
+                {hotel ? (
+                  <Button className="max-w-[150px]" disabled={isLoading}>
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4" /> Updating...
+                      </>
+                    ) : (
+                      <>
+                        <PencilLine className="mr-2 h-4 w-4" />
+                      </>
+                    )}
+                  </Button>
+                ) : (
+                  <>
+                    <Button className="max-w-[150px]" disabled={isLoading}>
+                      {isLoading ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4" /> Creating...
+                        </>
+                      ) : (
+                        <>
+                          <Pencil className="mr-2 h-4 w-4" /> Create Hotel
+                        </>
+                      )}
+                    </Button>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </form>
