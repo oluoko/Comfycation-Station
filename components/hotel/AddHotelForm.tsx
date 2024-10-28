@@ -35,6 +35,7 @@ import {
   Loader2,
   Pencil,
   PencilLine,
+  Terminal,
   Trash,
   XCircle,
 } from "lucide-react";
@@ -42,6 +43,7 @@ import axios from "axios";
 import useLocation from "@/hooks/useLocation";
 import { ICity, IState } from "country-state-city";
 import { useRouter } from "next/navigation";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 interface AddHotelFormProps {
   hotel: HotelWithRooms | null;
@@ -178,6 +180,8 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
             description: "Hotel created successfully",
           });
           router.push(`/hotel/${res.data.id}`);
+          // reload window
+          window.location.reload();
           setIsLoading(false);
         })
         .catch((err) => {
@@ -704,6 +708,17 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
                   </FormItem>
                 )}
               />
+
+              {hotel && !hotel.rooms.length && (
+                <Alert>
+                  <Terminal className=" h-4 w-4" />
+                  <AlertTitle>No Rooms Found</AlertTitle>
+                  <AlertDescription>
+                    You have not added any rooms to this hotel. Please add rooms
+                    to this hotel.
+                  </AlertDescription>
+                </Alert>
+              )}
               <div className="flex justify-between gap-2 flex-wrap">
                 {hotel && (
                   <Button
