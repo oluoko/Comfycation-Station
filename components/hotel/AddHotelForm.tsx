@@ -35,6 +35,7 @@ import {
   Loader2,
   Pencil,
   PencilLine,
+  Plus,
   Terminal,
   Trash,
   XCircle,
@@ -67,6 +68,7 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
   const [cities, setCities] = useState<ICity[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
 
   const { toast } = useToast();
   const router = useRouter();
@@ -764,21 +766,27 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
                   </Button>
                 )}
 
-                {
-                  <Dialog>
-                    <DialogTrigger>Open</DialogTrigger>
+                {hotel && (
+                  <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+                    <DialogTrigger>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="max-w-[150px]"
+                      >
+                        <Plus className="mr-2 h-4 w-4" /> Add Room
+                      </Button>
+                    </DialogTrigger>
                     <DialogContent>
                       <DialogHeader>
-                        <DialogTitle>Are you absolutely sure?</DialogTitle>
+                        <DialogTitle>Add a Room</DialogTitle>
                         <DialogDescription>
-                          This action cannot be undone. This will permanently
-                          delete your account and remove your data from our
-                          servers.
+                          Add details about a room in your hotel.
                         </DialogDescription>
                       </DialogHeader>
                     </DialogContent>
                   </Dialog>
-                }
+                )}
 
                 {hotel ? (
                   <Button className="max-w-[150px]" disabled={isLoading}>
