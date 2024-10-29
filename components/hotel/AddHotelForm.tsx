@@ -44,6 +44,14 @@ import useLocation from "@/hooks/useLocation";
 import { ICity, IState } from "country-state-city";
 import { useRouter } from "next/navigation";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 interface AddHotelFormProps {
   hotel: HotelWithRooms | null;
@@ -710,12 +718,13 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
               />
 
               {hotel && !hotel.rooms.length && (
-                <Alert>
-                  <Terminal className=" h-4 w-4" />
+                <Alert className="bg-indigo-500 text-white">
+                  <Terminal className=" h-4 w-4 stroke-white" />
                   <AlertTitle>No Rooms Found</AlertTitle>
                   <AlertDescription>
                     You have not added any rooms to this hotel. Please add rooms
                     to this hotel.
+                    <p>Add some rooms to complete your hotel setup</p>
                   </AlertDescription>
                 </Alert>
               )}
@@ -754,6 +763,22 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
                     View Hotel
                   </Button>
                 )}
+
+                {
+                  <Dialog>
+                    <DialogTrigger>Open</DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Are you absolutely sure?</DialogTitle>
+                        <DialogDescription>
+                          This action cannot be undone. This will permanently
+                          delete your account and remove your data from our
+                          servers.
+                        </DialogDescription>
+                      </DialogHeader>
+                    </DialogContent>
+                  </Dialog>
+                }
 
                 {hotel ? (
                   <Button className="max-w-[150px]" disabled={isLoading}>
