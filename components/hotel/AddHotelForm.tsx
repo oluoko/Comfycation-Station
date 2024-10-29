@@ -778,8 +778,8 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
                         <Plus className="mr-2 h-4 w-4" /> Add Room
                       </Button>
                     </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
+                    <DialogContent className="max-w-[900px] w-[90%]">
+                      <DialogHeader className="px-2">
                         <DialogTitle>Add a Room</DialogTitle>
                         <DialogDescription>
                           Add details about a room in your hotel.
