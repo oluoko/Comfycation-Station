@@ -264,6 +264,10 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
       });
   };
 
+  const handleDialogOpen = () => {
+    setOpenDialog((prev) => !prev);
+  };
+
   return (
     <div>
       <Form {...form}>
@@ -785,7 +789,10 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
                           Add details about a room in your hotel.
                         </DialogDescription>
                       </DialogHeader>
-                      <AddRoomForm />
+                      <AddRoomForm
+                        hotel={hotel}
+                        handleDialogOpen={handleDialogOpen}
+                      />
                     </DialogContent>
                   </Dialog>
                 )}
