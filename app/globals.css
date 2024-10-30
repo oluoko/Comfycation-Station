@@ -76,3 +76,21 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* scrollbar*/
+*::-webkit-scrollbar {
+  width: 7px;
+  border-radius: 15px;
+}
+
+*::-webkit-scrollbar-track {
+  border-radius: 15px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #000;
+  border-radius: 15px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+}
