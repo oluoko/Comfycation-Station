@@ -81,7 +81,7 @@ const AddRoomForm = ({ hotel, room, handleDialogOpen }: AddRoomFormProps) => {
     },
   });
   return (
-    <div className="max-h[75vh] overflow-y-auto px-2">
+    <div className="max-h-[75vh] overflow-y-scroll px-2">
       <Form {...form}>
         <form className="space-y-6">
           <FormField
@@ -136,8 +136,143 @@ const AddRoomForm = ({ hotel, room, handleDialogOpen }: AddRoomFormProps) => {
                         checked={field.value}
                         onCheckedChange={field.onChange}
                       />
-                      <FormLabel>24hrs Room Service</FormLabel>
                     </FormControl>
+                    <FormLabel>24hrs Room Service</FormLabel>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="Tv"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-end space-x-3 rounded-md border p-4">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormLabel>TV</FormLabel>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="balcony"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-end space-x-3 rounded-md border p-4">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormLabel>Balcony</FormLabel>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="freeWifi"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-end space-x-3 rounded-md border p-4">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormLabel>Free Wifi</FormLabel>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="cityView"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-end space-x-3 rounded-md border p-4">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormLabel>City View</FormLabel>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="oceanView"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-end space-x-3 rounded-md border p-4">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormLabel>Ocean View</FormLabel>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="forestView"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-end space-x-3 rounded-md border p-4">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormLabel>Forest View</FormLabel>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="mountainView"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-end space-x-3 rounded-md border p-4">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormLabel>Mountain View</FormLabel>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="airCondition"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-end space-x-3 rounded-md border p-4">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormLabel>Air Condition</FormLabel>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="soundProofed"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-end space-x-3 rounded-md border p-4">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormLabel>Sound Proofed</FormLabel>
                   </FormItem>
                 )}
               />
