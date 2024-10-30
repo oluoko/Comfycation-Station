@@ -5,6 +5,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "../ui/card";
@@ -19,18 +20,32 @@ import {
   Home,
   Loader2,
   MountainSnow,
+  Pencil,
   Ship,
   Speaker,
   Trash,
+  Trees,
   Tv,
   Users,
   UtensilsCrossed,
+  VolumeX,
   Wifi,
 } from "lucide-react";
 import { Separator } from "../ui/separator";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import AddRoomForm from "./AddRoomForm";
+import axios from "axios";
+import { useToast } from "@/hooks/use-toast";
 
 interface RoomCardProps {
   hotel?: Hotel & {
@@ -44,7 +59,50 @@ const RoomCard = ({ hotel, room, bookings = [] }: RoomCardProps) => {
   const pathname = usePathname();
   const isHotelDetailsPage = pathname.includes("hotel-details");
   const [isLoading, setIsLoading] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
+  const router = useRouter();
+  const { toast } = useToast();
 
+  const handleDialogOpen = () => {
+    setOpenDialog((prev) => !prev);
+  };
+
+  const handleRoomDelete = (room: Room) => {
+    setIsLoading(true);
+    const imageKey = room.image.substring(room.image.lastIndexOf("/") + 1);
+
+    axios
+      .post("/api/uploadthing/delete", { imageKey })
+      .then(() => {
+        axios
+          .delete(`/api/room/${room.id}`)
+          .then(() => {
+            router.refresh();
+            toast({
+              title: "Room Deleted",
+              description: "Room has been deleted successfully",
+              variant: "success",
+            });
+            setIsLoading(false);
+          })
+          .catch(() => {
+            toast({
+              title: "Error",
+              description: "Something went wrong while deleting the room",
+              variant: "destructive",
+            });
+            setIsLoading(false);
+          });
+      })
+      .catch(() => {
+        toast({
+          title: "Error",
+          description: "Something went wrong while deleting the room image",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+      });
+  };
   return (
     <Card>
       <CardHeader>
@@ -87,7 +145,7 @@ const RoomCard = ({ hotel, room, bookings = [] }: RoomCardProps) => {
               <UtensilsCrossed className="h-4 w-4" /> Room Service
             </AmenityItem>
           )}
-          {room.TV && (
+          {room.Tv && (
             <AmenityItem>
               <Tv className="h-4 w-4" />
               TV
@@ -137,7 +195,7 @@ const RoomCard = ({ hotel, room, bookings = [] }: RoomCardProps) => {
           )}
           {room.soundProofed && (
             <AmenityItem>
-              <Speaker className="h-4 w-4" />
+              <VolumeX className="h-4 w-4" />
               Sound Proofed
             </AmenityItem>
           )}
@@ -146,7 +204,7 @@ const RoomCard = ({ hotel, room, bookings = [] }: RoomCardProps) => {
         <div className="flex gap-4 justify-between">
           <div className="">
             Room Price: <span className="font-bold">${room.roomPrice}</span>
-            <span className="xs"> /24hrs</span>
+            <span className="text-xs">/24hrs</span>
           </div>{" "}
           {!!room.breakFastPrice && (
             <div>
@@ -156,25 +214,56 @@ const RoomCard = ({ hotel, room, bookings = [] }: RoomCardProps) => {
           )}
         </div>
         <Separator />
-        {isHotelDetailsPage ? (
-          <div>Hotel Details Page</div>
-        ) : (
-          <div className="flex w-full justify-between">
-            <Button>
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4" />
-                  Deleting...
-                </>
-              ) : (
-                <>
-                  <Trash className="mr-2 h-4" />
-                  Delete
-                </>
-              )}
-            </Button>
-          </div>
-        )}
+        <CardFooter>
+          {isHotelDetailsPage ? (
+            <div>Hotel Details Page</div>
+          ) : (
+            <div className="flex justify-between w-full">
+              <Button
+                disabled={isLoading}
+                type="button"
+                variant="ghost"
+                onClick={() => handleRoomDelete(room)}
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4" />
+                    Deleting...
+                  </>
+                ) : (
+                  <>
+                    <Trash className="mr-2 h-4" />
+                    Delete
+                  </>
+                )}
+              </Button>
+              <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+                <DialogTrigger>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="max-w-[150px]"
+                  >
+                    <Pencil className="mr-2 h-4 w-4" /> Update Room
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-[900px] w-[90%]">
+                  <DialogHeader className="px-2">
+                    <DialogTitle>Update Room</DialogTitle>
+                    <DialogDescription>
+                      Make changes to the room in your hotel.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <AddRoomForm
+                    hotel={hotel}
+                    room={room}
+                    handleDialogOpen={handleDialogOpen}
+                  />
+                </DialogContent>
+              </Dialog>
+            </div>
+          )}
+        </CardFooter>
       </CardContent>
     </Card>
   );
