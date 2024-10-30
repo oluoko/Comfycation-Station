@@ -10,7 +10,21 @@ import {
 } from "../ui/card";
 import Image from "next/image";
 import AmenityItem from "../AmenityItem";
-import { Bath, Bed, BedDouble, Users } from "lucide-react";
+import {
+  AirVent,
+  Bath,
+  Bed,
+  BedDouble,
+  Castle,
+  Home,
+  MountainSnow,
+  Ship,
+  Speaker,
+  Tv,
+  Users,
+  UtensilsCrossed,
+  Wifi,
+} from "lucide-react";
 
 interface RoomCardProps {
   hotel?: Hotel & {
@@ -57,6 +71,65 @@ const RoomCard = ({ hotel, room, bookings = [] }: RoomCardProps) => {
             <AmenityItem>
               <Bed className="h-4 w-4" />
               {room.queenBed} Queen Bed{"(s)"}
+            </AmenityItem>
+          )}
+          {room.roomService && (
+            <AmenityItem>
+              <UtensilsCrossed className="h-4 w-4" /> Room Service
+            </AmenityItem>
+          )}
+          {room.TV && (
+            <AmenityItem>
+              <Tv className="h-4 w-4" />
+              TV
+            </AmenityItem>
+          )}
+          {room.balcony && (
+            <AmenityItem>
+              <Home className="h-4 w-4" /> Balcony
+            </AmenityItem>
+          )}
+
+          {room.freeWifi && (
+            <AmenityItem>
+              <Wifi className="h-4 w-4" />
+              Free Wifi
+            </AmenityItem>
+          )}
+          {room.cityView && (
+            <AmenityItem>
+              <Castle className="h-4 w-4" />
+              City View
+            </AmenityItem>
+          )}
+          {room.oceanView && (
+            <AmenityItem>
+              <Ship className="h-4 w-4" />
+              Ocean View
+            </AmenityItem>
+          )}
+          {room.forestView && (
+            <AmenityItem>
+              <Trees className="h-4 w-4" />
+              Forest View
+            </AmenityItem>
+          )}
+          {room.mountainView && (
+            <AmenityItem>
+              <MountainSnow className="h-4 w-4" />
+              Mountain View
+            </AmenityItem>
+          )}
+          {room.airCondition && (
+            <AmenityItem>
+              <AirVent className="h-4 w-4" />
+              Air Conditioning
+            </AmenityItem>
+          )}
+          {room.soundProofed && (
+            <AmenityItem>
+              <Speaker className="h-4 w-4" />
+              Sound Proofed
             </AmenityItem>
           )}
         </div>
