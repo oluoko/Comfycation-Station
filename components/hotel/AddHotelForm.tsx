@@ -54,6 +54,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import AddRoomForm from "../room/AddRoomForm";
+import { Separator } from "@radix-ui/react-dropdown-menu";
+import RoomCard from "../room/RoomCard";
 
 interface AddHotelFormProps {
   hotel: HotelWithRooms | null;
@@ -825,6 +827,19 @@ const AddHotelForm = ({ hotel }: AddHotelFormProps) => {
                   </>
                 )}
               </div>
+              {hotel && !!hotel.rooms.length && (
+                <div>
+                  <Separator />
+                  <h3 className="text-lg font-semibold my-4">Hotel Rooms</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {hotel.rooms.map((room) => {
+                      return (
+                        <RoomCard key={room.id} hotel={hotel} room={room} />
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </form>
