@@ -54,7 +54,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import AddRoomForm from "../room/AddRoomForm";
-import { Separator } from "@radix-ui/react-dropdown-menu";
+import { Separator } from "@/components/ui/separator";
 import RoomCard from "../room/RoomCard";
 
 interface AddHotelFormProps {
