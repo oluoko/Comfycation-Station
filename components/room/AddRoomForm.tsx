@@ -16,12 +16,13 @@ import {
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Checkbox } from "../ui/checkbox";
-import { Image, Loader2, XCircle } from "lucide-react";
+import { Image, Loader2, Pencil, PencilLine, XCircle } from "lucide-react";
 import { Button } from "../ui/button";
 import { UploadButton } from "@uploadthing/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 interface AddRoomFormProps {
   hotel?: Hotel & {
@@ -89,10 +90,13 @@ const AddRoomForm = ({ hotel, room, handleDialogOpen }: AddRoomFormProps) => {
     },
   });
 
-  const [image, setImage] = useState<string | undefined>(hotel?.image);
+  const [image, setImage] = useState<string | undefined>(room?.image);
   const [imageIsDeleting, setImageIsDeleting] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { toast } = useToast();
+
+  const router = useRouter();
 
   useEffect(() => {
     if (typeof image === "string") {
@@ -135,8 +139,57 @@ const AddRoomForm = ({ hotel, room, handleDialogOpen }: AddRoomFormProps) => {
         setImageIsDeleting(false);
       });
   };
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
+    if (hotel && room) {
+      axios
+        .patch(`/api/room/${room.id}`, values)
+        .then((res) => {
+          toast({
+            variant: "success",
+            description: "Room updated successfully",
+          });
+          router.refresh();
+          setIsLoading(false);
+          handleDialogOpen();
+        })
+        .catch((err) => {
+          console.log(err);
+          toast({
+            variant: "destructive",
+            description: "Error while updating room",
+          });
+          setIsLoading(false);
+        });
+    } else {
+      if (!hotel) return;
+      axios
+        .post("/api/room", { ...values, hotelId: hotel.id })
+        .then((res) => {
+          toast({
+            variant: "success",
+            description: "Room created successfully",
+          });
+          router.refresh();
+          // reload window
+          window.location.reload();
+          setIsLoading(false);
+          handleDialogOpen();
+        })
+        .catch((err) => {
+          console.log(err);
+          toast({
+            variant: "destructive",
+            description: "Error while creating room",
+          });
+          setIsLoading(false);
+        });
+    }
+  }
+
   return (
-    <div className="max-h-[75vh] overflow-y-scroll px-2">
+    <div className="max-h-[75vh] overflow-y-scroll overflow-x-hidden px-2">
       <Form {...form}>
         <form className="space-y-6">
           <FormField
@@ -396,6 +449,181 @@ const AddRoomForm = ({ hotel, room, handleDialogOpen }: AddRoomFormProps) => {
               </FormItem>
             )}
           />
+          <div className="flex flex-row gap-6">
+            <div className="flex-1 flex-col gap-6">
+              <FormField
+                control={form.control}
+                name="roomPrice"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Room Price in USD
+                      <span className="text-2xl text-red-600">*</span>
+                    </FormLabel>
+                    <FormDescription>
+                      The price for staying in this room for 24 hours.
+                    </FormDescription>
+                    <FormControl>
+                      <Input type="number" min={0} {...field} />
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="bedCount"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Bed Count<span className="text-2xl text-red-600">*</span>
+                    </FormLabel>
+                    <FormDescription>
+                      How many beds are available in this room.
+                    </FormDescription>
+                    <FormControl>
+                      <Input type="number" min={0} max={4} {...field} />
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="guestCount"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Guest Count
+                      <span className="text-2xl text-red-600">*</span>
+                    </FormLabel>
+                    <FormDescription>
+                      How many guests are allowed in this room.
+                    </FormDescription>
+                    <FormControl>
+                      <Input type="number" min={0} max={4} {...field} />
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="bathroomCount"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Bathroom Count
+                      <span className="text-2xl text-red-600">*</span>
+                    </FormLabel>
+                    <FormDescription>
+                      How many bathrooms are in this room.
+                    </FormDescription>
+                    <FormControl>
+                      <Input type="number" min={0} max={4} {...field} />
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="flex-1 flex-col gap-6">
+              <FormField
+                control={form.control}
+                name="breakFastPrice"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>BreakFast Price in USD</FormLabel>
+                    <FormDescription>
+                      The Breakfast price for this room.
+                    </FormDescription>
+                    <FormControl>
+                      <Input type="number" min={0} {...field} />
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="kingBed"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>King Bed</FormLabel>
+                    <FormDescription>
+                      How many king beds are available in this room.
+                    </FormDescription>
+                    <FormControl>
+                      <Input type="number" min={0} max={4} {...field} />
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="queenBed"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Queen Bed</FormLabel>
+                    <FormDescription>
+                      How many queen beds are available in this room.
+                    </FormDescription>
+                    <FormControl>
+                      <Input type="number" min={0} max={4} {...field} />
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+          <div className="pt-4 pb-2">
+            {room ? (
+              <Button
+                className="max-w-[150px]"
+                disabled={isLoading}
+                type="button"
+                onClick={form.handleSubmit(onSubmit)}
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4" /> Updating...
+                  </>
+                ) : (
+                  <>
+                    <PencilLine className="mr-2 h-4 w-4" /> Update
+                  </>
+                )}
+              </Button>
+            ) : (
+              <>
+                <Button
+                  className="max-w-[150px]"
+                  disabled={isLoading}
+                  type="button"
+                  onClick={form.handleSubmit(onSubmit)}
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4" /> Creating...
+                    </>
+                  ) : (
+                    <>
+                      <Pencil className="mr-2 h-4 w-4" /> Create Room
+                    </>
+                  )}
+                </Button>
+              </>
+            )}
+          </div>
         </form>
       </Form>
     </div>
