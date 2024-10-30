@@ -17,14 +17,20 @@ import {
   BedDouble,
   Castle,
   Home,
+  Loader2,
   MountainSnow,
   Ship,
   Speaker,
+  Trash,
   Tv,
   Users,
   UtensilsCrossed,
   Wifi,
 } from "lucide-react";
+import { Separator } from "../ui/separator";
+import { usePathname } from "next/navigation";
+import { Button } from "../ui/button";
+import { useState } from "react";
 
 interface RoomCardProps {
   hotel?: Hotel & {
@@ -35,6 +41,10 @@ interface RoomCardProps {
 }
 
 const RoomCard = ({ hotel, room, bookings = [] }: RoomCardProps) => {
+  const pathname = usePathname();
+  const isHotelDetailsPage = pathname.includes("hotel-details");
+  const [isLoading, setIsLoading] = useState(false);
+
   return (
     <Card>
       <CardHeader>
@@ -52,7 +62,6 @@ const RoomCard = ({ hotel, room, bookings = [] }: RoomCardProps) => {
         </div>
         <div className="grid grid-cols-2 content-start gap-4 text-sm">
           <AmenityItem>
-            {" "}
             <Bed className="h-4 w-4" /> {room.bedCount} Bed{"(s)"}
           </AmenityItem>
           <AmenityItem>
@@ -133,6 +142,39 @@ const RoomCard = ({ hotel, room, bookings = [] }: RoomCardProps) => {
             </AmenityItem>
           )}
         </div>
+        <Separator />
+        <div className="flex gap-4 justify-between">
+          <div className="">
+            Room Price: <span className="font-bold">${room.roomPrice}</span>
+            <span className="xs"> /24hrs</span>
+          </div>{" "}
+          {!!room.breakFastPrice && (
+            <div>
+              BreakFast Price:{" "}
+              <span className="font-bold">{room.breakFastPrice}</span>
+            </div>
+          )}
+        </div>
+        <Separator />
+        {isHotelDetailsPage ? (
+          <div>Hotel Details Page</div>
+        ) : (
+          <div className="flex w-full justify-between">
+            <Button>
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4" />
+                  Deleting...
+                </>
+              ) : (
+                <>
+                  <Trash className="mr-2 h-4" />
+                  Delete
+                </>
+              )}
+            </Button>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
