@@ -14,12 +14,14 @@ import {
   IceCreamBowl,
   MapPin,
   Tv,
+  Users,
   WashingMachine,
   Waves,
   Wifi,
   Wine,
 } from "lucide-react";
 import useLocation from "@/hooks/useLocation";
+import { Button } from "../ui/button";
 
 const HotelCard = ({ hotel }: { hotel: HotelWithRooms }) => {
   const pathname = usePathname();
@@ -118,18 +120,31 @@ const HotelCard = ({ hotel }: { hotel: HotelWithRooms }) => {
                 <BedIcon className="size-4" /> Spa
               </AmenityItem>
             )}
+            {hotel.conferenceRoom && (
+              <AmenityItem>
+                <Users className="size-4" /> Conference Room
+              </AmenityItem>
+            )}
           </div>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1">
-              {hotel?.rooms[0].roomPrice && (
-                <>
-                  <div className="font-semibold text-base">
-                    ${hotel?.rooms[0].roomPrice}
-                    <span className="text-xs">/ 24hrs</span>
-                  </div>
-                </>
+              {hotel?.rooms?.[0]?.roomPrice ? (
+                <div className="font-semibold text-base">
+                  ${hotel.rooms[0].roomPrice}
+                  <span className="text-xs">/ 24hrs</span>
+                </div>
+              ) : (
+                <div className="text-gray-500">Price unavailable</div>
               )}
             </div>
+            {isMyHotels && (
+              <Button
+                onClick={() => router.push(`/hotel/${hotel.id}`)}
+                variant="outline"
+              >
+                Edit Hotel
+              </Button>
+            )}
           </div>
         </div>
       </div>
