@@ -1,4 +1,5 @@
 import { HotelWithRooms } from "./AddHotelForm";
+import HotelCard from "./HotelCard";
 
 const HotelList = ({ hotels }: { hotels: HotelWithRooms[] }) => {
   return (
