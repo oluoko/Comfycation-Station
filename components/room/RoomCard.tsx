@@ -29,6 +29,7 @@ import {
   Users,
   UtensilsCrossed,
   VolumeX,
+  Wand2,
   Wifi,
 } from "lucide-react";
 import { Separator } from "../ui/separator";
@@ -63,6 +64,7 @@ const RoomCard = ({ hotel, room, bookings = [] }: RoomCardProps) => {
   const pathname = usePathname();
   const isHotelDetailsPage = pathname.includes("hotel-details");
   const [isLoading, setIsLoading] = useState(false);
+  const [bookingIsLoading, setBookingIsLoading] = useState(false);
   const [date, setDate] = useState<DateRange | undefined>();
   const [openDialog, setOpenDialog] = useState(false);
   const [totalPrice, setTotalPrice] = useState(room.roomPrice);
@@ -273,6 +275,18 @@ const RoomCard = ({ hotel, room, bookings = [] }: RoomCardProps) => {
                 <span className="font-extrabold">${totalPrice}</span> for{" "}
                 <span className="font-extrabold">{days}</span> Days
               </div>
+              <Button
+                type="button"
+                disabled={bookingIsLoading}
+                onClick={() => {}}
+              >
+                {bookingIsLoading ? (
+                  <Loader2 className="mr-2 size-4" />
+                ) : (
+                  <Wand2 className="mr-2 size-4" />
+                )}
+                {bookingIsLoading ? "Booking..." : "Book Room"}
+              </Button>
             </div>
           ) : (
             <div className="flex justify-between w-full">
