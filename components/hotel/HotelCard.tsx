@@ -16,12 +16,12 @@ import {
   Tv,
   Users,
   WashingMachine,
-  Waves,
   Wifi,
   Wine,
 } from "lucide-react";
 import useLocation from "@/hooks/useLocation";
 import { Button } from "../ui/button";
+import { FaSwimmer } from "react-icons/fa";
 
 const HotelCard = ({ hotel }: { hotel: HotelWithRooms }) => {
   const pathname = usePathname();
@@ -69,7 +69,7 @@ const HotelCard = ({ hotel }: { hotel: HotelWithRooms }) => {
             )}
             {hotel.swimmingPool && (
               <AmenityItem>
-                <Waves className="size-4" /> Swimming Pool
+                <FaSwimmer className="size-4" /> Swimming Pool
               </AmenityItem>
             )}
             {hotel.movieNights && (
