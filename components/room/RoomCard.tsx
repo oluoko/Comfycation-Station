@@ -256,14 +256,12 @@ const RoomCard = ({ hotel, room, bookings = [] }: RoomCardProps) => {
                     Do you want to be served Breakfast?
                   </div>
 
-                  {room.roomPrice}
-
                   <div className="flex items-center spa-x-2">
                     <Checkbox
                       id="breaFast"
                       onCheckedChange={(value) => setIncludeBreakFast(!!value)}
                     />
-                    <label htmlFor="breaFast" className="text-sm">
+                    <label htmlFor="breaFast" className="text-sm ml-1">
                       Include Breakfast
                     </label>
                   </div>
