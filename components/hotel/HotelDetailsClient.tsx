@@ -5,15 +5,16 @@ import { HotelWithRooms } from "./AddHotelForm";
 import useLocation from "@/hooks/useLocation";
 import Image from "next/image";
 import AmenityItem from "../AmenityItem";
-import { MapPin } from "lucide-react";
-import { FaSwimmer } from "react-icons/fa";
+import { Dumbbell, MapPin, WashingMachine, Wine } from "lucide-react";
+import { FaSpa, FaSwimmer } from "react-icons/fa";
+import RoomCard from "../room/RoomCard";
 
 const HotelDetailsClient = ({
   hotel,
-  booking,
+  bookings,
 }: {
   hotel: HotelWithRooms;
-  booking?: Booking[];
+  bookings?: Booking[];
 }) => {
   const { getCountryByCode, getStatesByCode } = useLocation();
   const country = getCountryByCode(hotel.country);
@@ -48,7 +49,49 @@ const HotelDetailsClient = ({
               <FaSwimmer className="size-4" /> Swimming Pool
             </AmenityItem>
           )}
+          {hotel.gym && (
+            <AmenityItem>
+              <Dumbbell className="size-4" />
+              Gym
+            </AmenityItem>
+          )}
+          {hotel.spa && (
+            <AmenityItem>
+              {" "}
+              <FaSpa className="size-4" />
+              Spa
+            </AmenityItem>
+          )}
+          {hotel.bar && (
+            <AmenityItem>
+              <Wine className="size-4" /> Bar
+            </AmenityItem>
+          )}
+          {hotel.laundry && (
+            <AmenityItem>
+              <WashingMachine className="size-4" /> Laudnry
+            </AmenityItem>
+          )}
         </div>
+      </div>
+      <div className="">
+        {!!hotel.rooms.length && (
+          <div>
+            <h3 className="text-lg font-semibold my-4">Hotel Rooms</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+              {hotel.rooms.map((room) => {
+                return (
+                  <RoomCard
+                    room={room}
+                    key={room.id}
+                    hotel={hotel}
+                    bookings={bookings}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import useLocation from "@/hooks/useLocation";
 import { Button } from "../ui/button";
-import { FaSwimmer } from "react-icons/fa";
+import { FaSpa, FaSwimmer } from "react-icons/fa";
 
 const HotelCard = ({ hotel }: { hotel: HotelWithRooms }) => {
   const pathname = usePathname();
@@ -117,7 +117,7 @@ const HotelCard = ({ hotel }: { hotel: HotelWithRooms }) => {
 
             {hotel.spa && (
               <AmenityItem>
-                <BedIcon className="size-4" /> Spa
+                <FaSpa className="size-4" /> Spa
               </AmenityItem>
             )}
             {hotel.conferenceRoom && (

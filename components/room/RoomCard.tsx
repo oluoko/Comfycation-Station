@@ -216,7 +216,7 @@ const RoomCard = ({ hotel, room, bookings = [] }: RoomCardProps) => {
         <Separator />
         <CardFooter>
           {isHotelDetailsPage ? (
-            <div>Hotel Details Page</div>
+            <div></div>
           ) : (
             <div className="flex justify-between w-full">
               <Button
